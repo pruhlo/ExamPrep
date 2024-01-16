@@ -1,0 +1,80 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Login Page</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+
+<div id="language-switcher">
+    <button onclick="switchLanguage('en')">English</button>
+    <button onclick="switchLanguage('uk')">Українська</button>
+</div>
+
+{% if lang == 'en' %}
+    <div id="content-en">
+        <h1>Login</h1>
+        <form method="post" action="/login">
+            <label for="username">Username:</label>
+            <input type="text" id="username" name="username" required><br>
+
+            <label for="password">Password:</label>
+            <input type="password" id="password" name="password" required><br>
+            <input type="hidden" name="lang" value="{{lang}}">
+            <button type="submit">Log In</button>
+        </form>
+    </div>
+{% elif lang == 'uk' %}
+    <div id="content-uk">
+        <h1>Увійти</h1>
+        <form method="post" action="/login">
+            <label for="username">Ім'я користувача:</label>
+            <input type="text" id="username" name="username" required><br>
+
+            <label for="password">Пароль:</label>
+            <input type="password" id="password" name="password" required><br>
+            <input type="hidden" name="lang" value="{{lang}}">
+            <button type="submit">Увійти</button>
+        </form>
+    </div>
+{% endif %}
+
+<script>
+    
+        document.addEventListener('DOMContentLoaded', function () {
+            var urlParams = new URLSearchParams(window.location.search);
+            var error = urlParams.get('error');
+            
+            if (error) {
+                var errorElement = document.createElement('p');
+                errorElement.style.color = 'red';
+                errorElement.textContent = decodeURIComponent(error);
+                document.body.appendChild(errorElement);
+            }
+        });
+    
+
+    function switchLanguage(lang) {
+        var url = new URL(window.location.href);
+        url.searchParams.set('lang', lang);
+        window.location.href = url.toString();
+    }
+
+    document.addEventListener('DOMContentLoaded', function () {
+        var urlParams = new URLSearchParams(window.location.search);
+        var lang = urlParams.get('lang');
+        
+        if (lang === 'uk') {
+            document.getElementById('content-en').style.display = 'none';
+            document.getElementById('content-uk').style.display = 'block';
+        } else {
+            document.getElementById('content-en').style.display = 'block';
+            document.getElementById('content-uk').style.display = 'none';
+        }
+    });
+</script>
+
+</body>
+</html>

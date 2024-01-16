@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Welcome Page</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+
+<div id="language-switcher">
+    <button onclick="switchLanguage('en')">English</button>
+    <button onclick="switchLanguage('uk')">Українська</button>
+</div>
+
+<div id="content-en">
+    <h1>Welcome to the Testing App!</h1>
+    <p>Before you start testing, please log in.</p>
+    <p><a href="/login?lang=en">Login</a></p>
+</div>
+
+<div id="content-uk" style="display:none;">
+    <h1>Ласкаво просимо у додаток для перевірки ваших знань!</h1>
+    <p>Перед тим як почати тестування, будь ласка, увійдіть у систему.</p>
+    <p><a href="/login?lang=uk">Увійти</a></p>
+</div>
+
+<script>
+    function switchLanguage(lang) {
+        if (lang === 'en') {
+            document.getElementById('content-en').style.display = 'block';
+            document.getElementById('content-uk').style.display = 'none';
+        } else if (lang === 'uk') {
+            document.getElementById('content-en').style.display = 'none';
+            document.getElementById('content-uk').style.display = 'block';
+        }
+    }
+</script>
+
+</body>
+</html>

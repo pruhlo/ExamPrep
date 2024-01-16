@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Testing Page</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+
+<div id="language-switcher">
+    <button onclick="switchLanguage('en')">English</button>
+    <button onclick="switchLanguage('uk')">Українська</button>
+</div>
+
+{% if lang == 'en' %}
+    <div id="content-en">
+        <h1>Welcome to Testing, {{ user.username }}!</h1>
+        {% if error %}
+            <p style="color: red;">{{ error }}</p>
+        {% endif %}
+        <form method="post" action="/start_test?token={{ token }}">
+            <label for="theme">Select Theme:</label>
+            <select id="theme" name="theme" required>
+                {% for theme in themes %}
+                    <option value="{{ theme }}">{{ theme }}</option>
+                {% endfor %}
+            </select><br>
+
+            <label for="num_tests">Number of Tests:</label>
+            <input type="number" id="num_tests" name="num_tests" value="{{ num_tests }}" required><br>
+            <input type="hidden" name="lang" value="{{ lang }}">
+            
+            <button type="submit">Start Test</button>
+        </form>
+    </div>
+{% elif lang == 'uk' %}
+    <div id="content-uk">
+        <h1>Ласкаво просимо до тестування, {{ user.username }}!</h1>
+        {% if error %}
+            <p style="color: red;">{{ error }}</p>
+        {% endif %}
+        <form method="post" action="/start_test?token={{ token }}">
+            <label for="theme">Оберіть тему:</label>
+            <select id="theme" name="theme" required>
+                {% for theme in themes %}
+                    <option value="{{ theme }}">{{ theme }}</option>
+                {% endfor %}
+            </select><br>
+
+            <label for="num_tests">Кількість тестів:</label>
+            <input type="number" id="num_tests" name="num_tests" value="{{ num_tests }}" required><br>
+            <input type="hidden" name="lang" value="{{ lang }}">
+            
+            <button type="submit">Розпочати тестування</button>
+        </form>
+    </div>
+{% endif %}
+
+<script>
+    function switchLanguage(lang) {
+        var url = new URL(window.location.href);
+        url.searchParams.set('lang', lang);
+        window.location.href = url.toString();
+    }
+
+    document.addEventListener('DOMContentLoaded', function () {
+        var urlParams = new URLSearchParams(window.location.search);
+        var lang = urlParams.get('lang');
+        
+        if (lang === 'uk') {
+            document.getElementById('content-en').style.display = 'none';
+            document.getElementById('content-uk').style.display = 'block';
+        } else {
+            document.getElementById('content-en').style.display = 'block';
+            document.getElementById('content-uk').style.display = 'none';
+        }
+    });
+</script>
+
+</body>
+</html>
+

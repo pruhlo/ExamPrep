@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title style="color:red;">Test Results</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        h1 {
+            color: red;
+        }
+
+        h2 {
+            color: red;
+        }
+    </style>
+</head>
+<body>
+
+{% if lang == 'en' %}
+    <h1>Test Results</h1>
+    <p>User: {{ user.username }}</p>
+    <p>Total Questions: {{ len_tests }}</p>
+    <p>Score: {{ score }}</p>
+    <p>Total score: {{ total_score }}</p>
+
+    <h2>Questions</h2>
+    <ul>
+        {% for question in questions %}
+            <li>
+                <p><span style="color: darkblue;">Question:</span> {{ question.question }}</p>
+                <p><span style="color: darkblue;">Answer:</span> {{ question.answer }}</p>
+                <p><span style="color: darkblue;">Correct answer:</span> {{ question.correct_answer }}</p>
+            </li>
+        {% endfor %}
+    </ul>
+{% elif lang == 'uk' %}
+    <h1>Результати тестування</h1>
+    <p>Користувач: {{ user.username }}</p>
+    <p>Всього відповіли на {{ len_tests }} питань</p>
+    <p>Правильно відповіли на {{ score }} питань</p>
+    <p style="color:lime;">Остаточний результат: {{ total_score }}</p>
+
+    <h2>Питання</h2>
+    <ul>
+        {% for question in questions %}
+            <li>
+                <p><span style="color: darkblue;">Питання:</span> {{ question.question }}</p>
+                <p><span style="color: darkblue;">Відповідь:</span> {{ question.answer }}</p>
+                <p><span style="color: darkblue;">Правильна відповідь:</span> {{ question.correct_answer }}</p>
+            </li>
+        {% endfor %}
+    </ul>
+{% endif %}
+
+<script>
+    function switchLanguage(lang) {
+        var url = new URL(window.location.href);
+        url.searchParams.set('lang', lang);
+        window.location.href = url.toString();
+    }
+
+    document.addEventListener('DOMContentLoaded', function () {
+        var urlParams = new URLSearchParams(window.location.search);
+        var lang = urlParams.get('lang');
+
+        if (lang === 'uk') {
+            document.getElementById('content-en').style.display = 'none';
+            document.getElementById('content-uk').style.display = 'block';
+        } else {
+            document.getElementById('content-en').style.display = 'block';
+            document.getElementById('content-uk').style.display = 'none';
+        }
+    });
+</script>
+
+</body>
+</html>

@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Test Submission</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <script src="jquery-3.6.4.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('form').submit(function () {
+                var selectedData = [];
+                $('input[type="radio"]:checked').each(function () {
+                    var testId = $(this).attr('name').split('_')[1];
+                    var option = $(this).val();
+                    var item = {'id': testId, 'answer': option};
+                    selectedData.push(item);
+                });
+                $('#testData').val(JSON.stringify(selectedData));
+            });
+        });
+        $(document).ready(function () {
+            // Timer for form submission
+            var totalTime = '{{ testing_time }}'; // 2 minutes in seconds
+            var TimeRemaining = '{{Time_Remaining}}';
+            var seconds = '{{seconds}}';
+            var timerInterval = setInterval(function () {
+                $('#timer').text(TimeRemaining + totalTime + seconds);
+                totalTime--;
+
+                if (totalTime <= 0) {
+                    clearInterval(timerInterval);
+                    $('#testForm').submit(); // Submit the form when time runs out
+                }
+            }, 1000);
+        });
+    </script>
+    
+</head>
+<body>
+    <div id="timer" style="position: fixed; top: 0; left: 0; width: 100%; background-color: #eb2727; padding: 10px; z-index: 1000;">
+      </div>
+      
+    <form id="testForm" method="post" action="/submit_test" style="margin-top: 10vh;">
+        {% for test in tests %}
+            <fieldset>
+                <legend>{{ test.question }}</legend>
+                {% for option in test.options %}
+                    <label>
+                        <input type="radio" name="answers_{{ test.id }}" value="{{ option }}">
+                        {{ option }}
+                    </label><br>
+                {% endfor %}
+            </fieldset>
+        {% endfor %}
+        <input type="hidden" id="theme" name="theme" value="{{ theme }}">
+        <input type="hidden" id="token" name="token" value="{{ token }}">
+        <input type="hidden" id="lang" name="lang" value="{{ lang }}">
+        <input type="hidden" id="testData" name="testData" value="">
+        <button type="submit">{{submit}}</button>
+    </form>
+</body>
+</html>
+
+
+
