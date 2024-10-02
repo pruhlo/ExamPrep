@@ -136,7 +136,8 @@ async def login(username: str = Form(...), password: str = Form(...), lang: str=
         response = RedirectResponse(url=f"/login?lang={lang}&error={error_message}", status_code=303)
         return response
     #token = token_generation_function(user)
-    headers = {"Authorization": f"{token}"} # problems with transport token to headers into (on at) testing page
+    #headers = {"Authorization": f"{token}"} # problems with transport token to headers into (on at) testing page
+    headers = {"Authorization": f"{user}"} 
     response = RedirectResponse(url=f"/testing?lang={lang}&token={user}", status_code=303, headers=headers)
     return response
 
