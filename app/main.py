@@ -135,15 +135,16 @@ async def login(username: str = Form(...), password: str = Form(...), lang: str=
             response = Response(status_code=303)
         response = RedirectResponse(url=f"/login?lang={lang}&error={error_message}", status_code=303)
         return response
-    token = token_generation_function(user)
+    #token = token_generation_function(user)
     headers = {"Authorization": f"{token}"} # problems with transport token to headers into (on at) testing page
-    response = RedirectResponse(url=f"/testing?lang={lang}&token={token}", status_code=303, headers=headers)
+    response = RedirectResponse(url=f"/testing?lang={lang}&token={user}", status_code=303, headers=headers)
     return response
 
 # Endpoint for the testing page
 @app.get("/testing")
 async def get_testing_page(request: Request, token: str = Query(...), lang: str = Query(...)):
-    current_user = get_current_user(token)
+    #current_user = get_current_user(token)
+    current_user = token
     unique_themes = set(test["theme"] for test in tests_db)
     unique_themes_list = list(unique_themes)
     return templates.TemplateResponse(
@@ -178,7 +179,8 @@ async def get_jquery():
 # Endpoint to start a test
 @app.post("/start_test")
 async def start_test(request: Request, theme: str = Form(...), token: str = Query(...), num_tests: int = Form(...), lang: str=Form(...)):
-    current_user = get_current_user(token)
+    #current_user = get_current_user(token)
+    current_user = token
     theme_tests = [test for test in tests_db if test["theme"] == theme]
     for test in theme_tests:
         random.shuffle(test['options'])
@@ -214,7 +216,8 @@ async def submit_test(request: Request, testData: str = Form(...), token: str = 
     global tests_db
     data = json.loads(testData)
     user_ip = request.client.host
-    current_user = get_current_user(token)
+    #current_user = get_current_user(token)
+    current_user = token
     now = datetime.now()
     current_date = now.strftime("%Y-%m-%d")  # Format: YYYY-MM-DD
     current_time = now.strftime("%H:%M:%S")
