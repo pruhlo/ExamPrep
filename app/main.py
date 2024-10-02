@@ -125,7 +125,7 @@ async def login(username: str = Form(...), password: str = Form(...), lang: str=
     user = None
     for u in users_db:
         if u["username"] == username and u["password"] == password:
-            user = u
+            user = u["username"]
     if user is None:
         if lang == 'uk':
             error_message = "Недійсні облікові дані. Перевірте введене ім'я користувача або пароль."
