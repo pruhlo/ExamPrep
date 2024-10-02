@@ -37,7 +37,7 @@ ALGORITHM = "HS256"
 app = FastAPI()
 
 # Configure testing time
-testing_time = 30
+testing_time = 300
 num_tests = 10
 
 # HTML templates
@@ -112,7 +112,7 @@ def token_generation_function(user: Dict[str, Union[str, int]]) -> str:
     :param user: Dictionary with user data (username, id).
     :return: Generated token.
     """
-    data = {"sub": user["username"], "user_id": user["id"], "exp": datetime.utcnow() + timedelta(seconds=testing_time*num_tests+60)}
+    data = {"sub": user["username"], "user_id": user["id"]}#, "exp": datetime.utcnow() + timedelta(seconds=testing_time*num_tests+60)}
     token = jwt.encode(data, SECRET_KEY, algorithm=ALGORITHM)
     return token
 
